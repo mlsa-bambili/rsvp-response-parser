@@ -1,11 +1,14 @@
 package com.elroykanye.mailer;
 
+import org.apache.commons.mail.*;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
+import java.util.Scanner;
 
 import static com.elroykanye.mailer.Util.getAttachment;
 
@@ -15,12 +18,16 @@ public class EmailDispatcher {
     private final Sender SENDER  = Sender.builder()
             .sendingEmail("elroykanye@outlook.com")
             .fromEmail("elroykanye@outlook.com")
-            .password("55Brocoli!!")
+            .password("")
             .build();
+    String MAIL_HOST = "smtp-mail.outlook.com";
+    String MAIL_PORT = "587";
 
+    /**
+     * Modifies the PROPERTIES object to set up the mail server and addresses
+     */
     private void setupProperties() {
-        String MAIL_HOST = "smtp-mail.outlook.com";
-        String MAIL_PORT = "587";
+
 
 
         PROPERTIES.put("mail.smtp.user", SENDER.getSendingEmail());
@@ -34,10 +41,56 @@ public class EmailDispatcher {
         PROPERTIES.put("mail.smtp.starttls.required", "true");
         PROPERTIES.put("mail.smtp.ssl.protocols", "TLSv1.2");
         PROPERTIES.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+    }
+
+    /**
+     * Dispatches an email to the attendee with an attached certificate
+     * @param eventDetails: represents the event information to be included in the email
+     * @param attendee: information about the attendee including name and email
+     */
+    public void sendEmailCommons(EventDetails eventDetails, Attendee attendee, String password) {
+        SENDER.setPassword(password);
+
+        setupProperties();
+        Attachment fileAttachment = Util.getAttachment(attendee);
+        EmailAttachment emailAttachment = new EmailAttachment();
+        emailAttachment.setPath(fileAttachment.getAttachmentPathPdf());
+        emailAttachment.setDisposition(EmailAttachment.ATTACHMENT);
+        emailAttachment.setName(fileAttachment.getAttachmentName());
+        emailAttachment.setDescription(attendee.getName() +
+                " " +
+                eventDetails.getEventName() +
+                " attendance certificate.");
 
 
-        // System.out.println("Enter password for: " + PROPERTIES);
-        // String password = new Scanner(System.in).nextLine();
+        try {
+            // create the email message
+            MultiPartEmail multiPartEmail = new MultiPartEmail();
+            multiPartEmail.setHostName(MAIL_HOST);
+            multiPartEmail.setSmtpPort(587);
+            multiPartEmail.setStartTLSEnabled(true);
+            multiPartEmail.setAuthentication(SENDER.getSendingEmail(), SENDER.getPassword());
+            multiPartEmail.setBoolHasAttachments(true);
+            multiPartEmail.setSSLOnConnect(true);
+            multiPartEmail.setStartTLSRequired(true);
+            multiPartEmail.setMailSession(Session.getDefaultInstance(PROPERTIES));
+            // TODO change this to attendee email
+
+            multiPartEmail.addTo(attendee.getEmail());
+
+
+
+            multiPartEmail.setFrom(SENDER.getFromEmail());
+            multiPartEmail.setSubject(eventDetails.getEventSubject());
+            multiPartEmail.setMsg(eventDetails.getEventDesc());
+
+            multiPartEmail.attach(emailAttachment);
+            multiPartEmail.send();
+
+            System.out.println("Mail successfully sent to: " + attendee.getEmail());
+        } catch (EmailException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -68,7 +121,7 @@ public class EmailDispatcher {
             assert attachment != null;
             DataSource dataSource = new FileDataSource(attachment.getAttachmentPathDocx());
             messageBody2.setDataHandler(new DataHandler(dataSource));
-            messageBody2.setFileName(attachment.getAttachmentPathDocx());
+            messageBody2.setFileName(attachment.getAttachmentName());
 
             // creating multipart object
             Multipart multipart = new MimeMultipart();

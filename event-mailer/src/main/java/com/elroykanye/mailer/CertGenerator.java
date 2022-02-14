@@ -48,7 +48,6 @@ public class CertGenerator {
         XWPFTemplate.compile(Util.templateDoc)
                 .render(data)
                 .writeToFile(Util.getAttachment(attendee).getAttachmentPathDocx());
-        //generateCertPdf(attendee);
     }
 
     private void generateCertPdf(Attendee attendee) {
