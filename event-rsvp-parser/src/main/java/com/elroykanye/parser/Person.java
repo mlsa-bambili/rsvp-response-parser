@@ -1,12 +1,12 @@
-package com.elroykanye.rsvparser;
+package com.elroykanye.parser;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {
