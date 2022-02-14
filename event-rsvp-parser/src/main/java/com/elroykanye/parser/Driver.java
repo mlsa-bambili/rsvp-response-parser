@@ -1,4 +1,4 @@
-package com.elroykanye.rsvparser;
+package com.elroykanye.parser;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -10,9 +10,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 public class Driver {
 
+    public static Person arrangePersonName(Person person) {
+        String[] names = person.getName().split(" ");
+        System.out.println(person);
+        StringBuilder newName = new StringBuilder();
+        for (String name: names) {
+            char[] nameAsArray = name.toCharArray();
+            if (nameAsArray.length > 0) {
+                nameAsArray[0] = Character.toUpperCase(nameAsArray[0]);
+                for (int i = 1; i < nameAsArray.length; i++) {
+                    nameAsArray[i] = Character.toLowerCase(nameAsArray[i]);
+                }
+                newName.append(" ").append(String.copyValueOf(nameAsArray));
+            }
+
+        }
+        person.setName(newName.toString());
+        return person;
+    }
     public static List<Person> excelReader(java.lang.String fileLocation, boolean skipFirstRow) {
         List<Person> rsvps = new ArrayList<>();
         File excelFile  = new File(fileLocation);
@@ -57,7 +77,7 @@ public class Driver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return rsvps;
+        return rsvps.stream().map(Driver::arrangePersonName).collect(Collectors.toList());
     }
 
     private static Object getCellValue(Cell cell) {
