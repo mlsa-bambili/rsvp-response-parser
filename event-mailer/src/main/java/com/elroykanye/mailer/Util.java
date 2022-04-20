@@ -2,6 +2,8 @@ package com.elroykanye.mailer;
 
 import com.aspose.words.Document;
 import com.aspose.words.SaveFormat;
+import com.elroykanye.mailer.models.Attachment;
+import com.elroykanye.mailer.models.Attendee;
 
 public class Util {
     private final static String certPathDoc = "event-mailer/src/main/resources/doc/";

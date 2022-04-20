@@ -1,9 +1,9 @@
 package com.elroykanye.main;
 
-import com.elroykanye.mailer.Attendee;
+import com.elroykanye.mailer.models.Attendee;
 import com.elroykanye.mailer.CertGenerator;
 import com.elroykanye.mailer.EmailDispatcher;
-import com.elroykanye.mailer.EventDetails;
+import com.elroykanye.mailer.models.EventDetails;
 
 import java.util.List;
 import java.util.Scanner;

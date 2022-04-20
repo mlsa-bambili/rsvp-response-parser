@@ -1,5 +1,9 @@
 package com.elroykanye.mailer;
 
+import com.elroykanye.mailer.models.Attachment;
+import com.elroykanye.mailer.models.Attendee;
+import com.elroykanye.mailer.models.EventDetails;
+import com.elroykanye.mailer.models.Sender;
 import org.apache.commons.mail.*;
 
 import javax.activation.DataHandler;
@@ -8,7 +12,6 @@ import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
-import java.util.Scanner;
 
 import static com.elroykanye.mailer.Util.getAttachment;
 

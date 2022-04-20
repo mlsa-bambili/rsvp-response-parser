@@ -2,6 +2,8 @@ package com.elroykanye.mailer;
 
 
 import com.deepoove.poi.XWPFTemplate;
+import com.elroykanye.mailer.models.Attachment;
+import com.elroykanye.mailer.models.Attendee;
 import com.elroykanye.parser.Driver;
 import org.apache.poi.xwpf.converter.pdf.PdfConverter;
 import org.apache.poi.xwpf.converter.pdf.PdfOptions;
@@ -26,18 +28,15 @@ public class CertGenerator {
                 e.printStackTrace();
             }
         });
-
         return attendees;
     }
 
     private void getAttendees (String attendeeList) {
         Driver.excelReader(attendeeList, true)
-                .forEach(person -> {
-                    attendees.add(Attendee.builder()
-                            .name(person.getName())
-                            .email(person.getEmail())
-                            .build());
-                });
+                .forEach(person -> attendees.add(Attendee.builder()
+                        .name(person.getName())
+                        .email(person.getEmail())
+                        .build()));
     }
 
     private void generateCertDocx(String eventName, Attendee attendee) throws IOException {
