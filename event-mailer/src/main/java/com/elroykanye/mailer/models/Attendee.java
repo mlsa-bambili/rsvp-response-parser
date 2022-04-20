@@ -1,4 +1,4 @@
-package com.elroykanye.mailer;
+package com.elroykanye.mailer.models;
 
 import lombok.Builder;
 import lombok.Data;
