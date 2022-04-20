@@ -80,6 +80,13 @@
             <artifactId>commons-email</artifactId>
             <version>1.4</version>
         </dependency>
+
+        <!-- rincl -->
+        <dependency>
+            <groupId>io.rincl</groupId>
+            <artifactId>rincl-resourcebundle</artifactId>
+            <version>0.8.0</version>
+        </dependency>
     </dependencies>
 
 </project>
